@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+const itch = 'https://kuragestudios.itch.io/paulo';
+const play = 'https://play.google.com/store/apps/details?id=com.studiokurage.paulo';
+
+const screenshots = [
+  { src: 'carousel-screenshot.png', alt: 'Blocks of bricks falling on the construction site' },
+  { src: 'carousel-avoid.png', alt: 'Avoid the bricks' },
+  { src: 'carousel-push.png', alt: 'Push the blocks' },
+  { src: 'carousel-collect.png', alt: 'Collect fruits and vegetables' },
+  { src: 'carousel-unlock.png', alt: 'Open locks with keys' },
+];
+
+const animations = ['animation-00.gif', 'animation-01.gif', 'animation-02.gif', 'animation-03.gif'];
+
+const features = [
+  { icon: '🧱', title: 'Two buttons, endless trouble', text: 'Move left, move right. Bricks fall from the sky; get crushed and you lose a heart. Push the blocks around to line them up and destroy the wall.' },
+  { icon: '👾', title: 'Hand-crafted pixel art', text: 'A night-time construction site, a skyline that never sleeps, and a hero drawn one pixel at a time.' },
+  { icon: '🎵', title: 'Awesome chiptunes', text: 'An original soundtrack straight out of the 80s arcades.' },
+  { icon: '📺', title: 'CRT screen emulation', text: 'Scanlines and glow for the authentic look. Switch to the LCD look in the options if you prefer it clean.' },
+  { icon: '👕', title: '9 costumes, a collection to fill', text: 'Dress Paulo up as a robot, a superhero, a surfer… and collect every fruit and vegetable hidden in the crates.' },
+  { icon: '🔕', title: 'No ads, no accounts', text: 'The mobile ads and in-app purchase are gone. Every level is open. Just play.' },
+];
+
+const blocks = [
+  { name: 'Brick', text: 'The regular falling block. Line up a full row to clear it and score.' },
+  { name: 'Heart', text: 'Protects you. Pick it up before you need it.' },
+  { name: 'Key and lock', text: 'A lock block cannot be cleared until you bring it a key.' },
+  { name: 'Anvil', text: 'Unpushable. Plan around it.' },
+  { name: 'Bomb', text: 'Explodes the blocks around it. Shakes the screen too.' },
+  { name: 'TNT', text: 'Explodes everything. Stand clear.' },
+  { name: 'Crate', text: 'Full of surprises: coins, fruits and vegetables for your collection.' },
+];
+---
+
+<Base title="Paulo — retro arcade game, free in your browser">
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <img class="hero-logo" src={`${base}images/logo.png`} alt="Paulo" width="512" />
+        <p class="tagline">Blocks of bricks are falling from the sky! Dodge them, push them, line them up and blow them away. Revive the golden age of arcade games.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={`${base}play/`}>▶ Play free in your browser</a>
+          <a class="btn btn-pink" href={itch} target="_blank" rel="noopener">♥ Get it for Mac / Windows</a>
+        </div>
+        <p class="muted small">Keyboard, gamepad, mouse or touch. No install, no account.</p>
+      </div>
+      <div class="hero-shot">
+        <img src={`${base}images/carousel-title.png`} alt="Paulo title screen" width="360" loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>How it plays</h2>
+      <div class="grid grid-3">
+        {features.map((f) => (
+          <div class="card">
+            <div class="icon" aria-hidden="true">{f.icon}</div>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="blocks" class="section blocks">
+    <div class="container blocks-inner">
+      <div>
+        <h2><span class="accent">▮</span>Know your blocks</h2>
+        <p>Paulo is monitoring a construction site overnight but it isn't exactly going smoothly… Every block that falls is a problem or an opportunity. Learn them in the two-step tutorial, then survive as long as you can: the higher the level, the faster they come.</p>
+        <p class="muted">Controls: ← → or A / D on the keyboard, any gamepad, or tap the left and right half of the screen.</p>
+        <a class="btn" href={`${base}play/`}>Start the tutorial</a>
+      </div>
+      <ol class="block-list">
+        {blocks.map((b) => (
+          <li><strong>{b.name}</strong> — {b.text}</li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>Screenshots</h2>
+      <div class="shots">
+        {screenshots.map((s) => <img src={`${base}images/${s.src}`} alt={s.alt} loading="lazy" width="320" />)}
+      </div>
+      <div class="shots gifs">
+        {animations.map((a) => <img src={`${base}images/${a}`} alt="Paulo in motion" loading="lazy" width="288" height="512" />)}
+      </div>
+      <p class="muted small">Trailer: <a href="https://www.youtube.com/watch?v=xp6RN9XDwVo" target="_blank" rel="noopener">watch on YouTube</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>Play free, or say thanks</h2>
+      <div class="grid grid-3 download">
+        <div class="card">
+          <h3>Browser</h3>
+          <p class="price">Free</p>
+          <p>The complete game, right here. Nothing to install.</p>
+          <a class="btn btn-primary" href={`${base}play/`}>Play now</a>
+        </div>
+        <div class="card highlight">
+          <h3>Mac &amp; Windows</h3>
+          <p class="price">Small paid download</p>
+          <p>Offline, full screen, any window size. It is the "thank you" that keeps the lights on.</p>
+          <a class="btn btn-pink" href={itch} target="_blank" rel="noopener">Buy on itch.io</a>
+        </div>
+        <div class="card">
+          <h3>Android</h3>
+          <p class="price">Coming back</p>
+          <p>The Google Play version is being refreshed, without ads this time.</p>
+          <a class="btn" href={play} target="_blank" rel="noopener">Google Play</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 5vw, 4rem); background: radial-gradient(ellipse at 20% 0%, rgba(33, 230, 245, 0.12), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(255, 79, 216, 0.12), transparent 55%); }
+  .hero-inner { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 860px) { .hero-inner { grid-template-columns: 1.2fr 0.8fr; } }
+  .hero-logo { width: min(100%, 420px); height: auto; image-rendering: pixelated; filter: drop-shadow(0 0 24px rgba(33, 230, 245, 0.35)); }
+  .tagline { font-size: clamp(1.1rem, 2vw, 1.35rem); color: var(--text); max-width: 34em; margin-top: 1.2rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.4rem 0 0.8rem; }
+  .small { font-size: 0.9rem; }
+  .hero-shot img { width: min(100%, 360px); margin: 0 auto; border-radius: 22px; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55); image-rendering: pixelated; }
+
+  .icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+
+  .blocks-inner { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 860px) { .blocks-inner { grid-template-columns: 1.1fr 0.9fr; } }
+  .block-list { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 0.7rem; }
+  .block-list li { counter-increment: step; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.9rem 3.2rem; position: relative; color: var(--muted); }
+  .block-list li strong { color: var(--text); }
+  .block-list li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 1rem; top: 0.85rem; font-family: var(--mono); color: var(--pink); }
+
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .shots img { width: 100%; border-radius: 16px; border: 1px solid var(--line); }
+  .gifs { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .gifs img { image-rendering: pixelated; }
+
+  .download .card { display: flex; flex-direction: column; gap: 0.6rem; }
+  .download .card .btn { margin-top: auto; align-self: flex-start; }
+  .download .price { color: var(--cyan); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.8rem; }
+  .download .highlight { border-color: rgba(255, 79, 216, 0.5); box-shadow: 0 0 40px rgba(255, 79, 216, 0.12); }
+  .download .highlight .price { color: var(--pink); }
+</style>
