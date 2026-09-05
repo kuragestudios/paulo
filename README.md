@@ -14,3 +14,6 @@ npm run build    # dist/
 
 Deploy: push to `main`; `.github/workflows/deploy.yml` builds and publishes to Pages
 (Settings > Pages > Source: GitHub Actions).
+
+Sprites in `public/images/sprites/` are exported from the Unity project by `scripts/sprites.py`
+(needs Pillow: `pip install pillow`).

@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 const base = import.meta.env.BASE_URL;
 const itch = 'https://kuragestudios.itch.io/paulo';
 const play = 'https://play.google.com/store/apps/details?id=com.studiokurage.paulo';
+const sprite = (name: string) => `${base}images/sprites/${name}.png`;
 
 const screenshots = [
   { src: 'carousel-screenshot.png', alt: 'Blocks of bricks falling on the construction site' },
@@ -13,25 +14,62 @@ const screenshots = [
   { src: 'carousel-unlock.png', alt: 'Open locks with keys' },
 ];
 
-const animations = ['animation-00.gif', 'animation-01.gif', 'animation-02.gif', 'animation-03.gif'];
+const gifs = ['animation-00.gif', 'animation-01.gif', 'animation-02.gif', 'animation-03.gif'];
+
+const quotes = [
+  { author: 'Mahrez', text: 'Best game! Must have if you like retro game!' },
+  { author: 'Julie', text: 'Wow, this reminds me of a more modern version of the old watch games I used to play with only two buttons. Simple but fun!' },
+];
 
 const features = [
-  { icon: '🧱', title: 'Two buttons, endless trouble', text: 'Move left, move right. Bricks fall from the sky; get crushed and you lose a heart. Push the blocks around to line them up and destroy the wall.' },
-  { icon: '👾', title: 'Hand-crafted pixel art', text: 'A night-time construction site, a skyline that never sleeps, and a hero drawn one pixel at a time.' },
-  { icon: '🎵', title: 'Awesome chiptunes', text: 'An original soundtrack straight out of the 80s arcades.' },
-  { icon: '📺', title: 'CRT screen emulation', text: 'Scanlines and glow for the authentic look. Switch to the LCD look in the options if you prefer it clean.' },
-  { icon: '👕', title: '9 costumes, a collection to fill', text: 'Dress Paulo up as a robot, a superhero, a surfer… and collect every fruit and vegetable hidden in the crates.' },
-  { icon: '🔕', title: 'No ads, no accounts', text: 'The mobile ads and in-app purchase are gone. Every level is open. Just play.' },
+  { icon: 'costume-base', title: 'Two buttons, endless trouble', text: 'Move left, move right. Bricks fall from the sky; get crushed and you lose a heart. Push the blocks around to line them up and destroy the wall.' },
+  { icon: 'brick-4', title: 'Hand-crafted pixel art', text: 'A night-time construction site, a skyline that never sleeps, and a hero drawn one pixel at a time.' },
+  { icon: 'coin', title: 'Awesome chiptunes', text: 'An original soundtrack straight out of the 80s arcades, and a CRT filter with scanlines you can switch off in the options.' },
+  { icon: 'crate-3', title: 'Crates full of surprises', text: 'Push a crate into a line and it turns into a gift: hearts, keys, coins, power-ups or a snack for your collection.' },
+  { icon: 'costume-superhero', title: '9 costumes', text: 'Dress Paulo up as a robot, a superhero, a surfer, a judoka… Each costume unlocks once you have collected its set of items.' },
+  { icon: 'heart', title: 'No ads, no accounts', text: 'The mobile ads and in-app purchase are gone. Every level is open. Just play.' },
+];
+
+const controls = [
+  { action: 'Move left / right', touch: 'tap the left / right half', keys: '← →  or  A D', pad: 'd-pad or left stick' },
+  { action: 'Pause / back', touch: 'pause button', keys: 'Esc', pad: 'B' },
 ];
 
 const blocks = [
-  { name: 'Brick', text: 'The regular falling block. Line up a full row to clear it and score.' },
-  { name: 'Heart', text: 'Protects you. Pick it up before you need it.' },
-  { name: 'Key and lock', text: 'A lock block cannot be cleared until you bring it a key.' },
-  { name: 'Anvil', text: 'Unpushable. Plan around it.' },
-  { name: 'Bomb', text: 'Explodes the blocks around it. Shakes the screen too.' },
-  { name: 'TNT', text: 'Explodes everything. Stand clear.' },
-  { name: 'Crate', text: 'Full of surprises: coins, fruits and vegetables for your collection.' },
+  { name: 'brick-0', title: 'Brick', text: 'The regular falling block, 10 points. Complete a row to clear it. New colours appear from level 10 and level 20.' },
+  { name: 'crate-3', title: 'Crate', text: 'Clear it and it becomes a gift block instead of disappearing.' },
+  { name: 'bomb', title: 'Bomb', text: 'Explodes the blocks around it when cleared. Shakes the screen too.' },
+  { name: 'tnt', title: 'TNT', text: 'Explodes everything on the board. Stand clear.' },
+  { name: 'lock', title: 'Lock', text: 'Unbreakable, 250 points. Only a key can open it.' },
+  { name: 'anvil', title: 'Anvil', text: 'Too heavy to push, 100 points. Plan around it.' },
+];
+
+const gifts = [
+  { name: 'heart', title: 'Heart', text: 'Protects you. Lose one instead of the game when a brick lands on your head.' },
+  { name: 'key', title: 'Key', text: 'Opens the next lock you clear.' },
+  { name: 'coin', title: 'Coin', text: '100 points.' },
+  { name: 'star', title: 'Star', text: 'A rain of coins on every free column, plus one snack.' },
+  { name: 'mushroom', title: 'Green mushroom', text: 'Blocks fall at half speed for five seconds.' },
+  { name: 'skull', title: 'Red mushroom', text: 'Twice as many blocks for five seconds. Not every gift is good news.' },
+];
+
+const costumes = [
+  { file: 'base', title: 'Paulo' }, { file: 'disco', title: 'Disco' }, { file: 'judo', title: 'Judo' },
+  { file: 'kungfu', title: 'Kung fu' }, { file: 'office', title: 'Office' }, { file: 'robot', title: 'Robot' },
+  { file: 'soccer', title: 'Soccer' }, { file: 'superhero', title: 'Superhero' }, { file: 'surf', title: 'Surf' },
+];
+
+const items = [
+  'Cherries', 'Banana', 'Watermelon', 'Lemon', 'Grapes', 'Pear', 'Apple', 'Strawberry',
+  'Pineapple', 'Orange', 'Kiwi', 'Tomato', 'Radish', 'Carrot', 'Potato', 'Aubergine',
+  'Chili', 'Daikon', 'Corn', 'Lollipop', 'Candy cane', 'Muffin', 'Donut', 'Cupcake',
+  'Ice cream', 'Cheese', 'Fried egg', 'Ham', 'Hot dog', 'Pizza', 'Fries', 'Burger',
+];
+
+const whatsNew = [
+  'free in the browser, downloadable on Mac and Windows',
+  'keyboard and gamepad controls next to the original touch controls',
+  'ads and in-app purchase removed: every level is open, the revive-by-ad button is gone',
 ];
 ---
 
@@ -59,7 +97,7 @@ const blocks = [
       <div class="grid grid-3">
         {features.map((f) => (
           <div class="card">
-            <div class="icon" aria-hidden="true">{f.icon}</div>
+            <img class="pixel card-icon" src={sprite(f.icon)} alt="" />
             <h3>{f.title}</h3>
             <p>{f.text}</p>
           </div>
@@ -68,19 +106,108 @@ const blocks = [
     </div>
   </section>
 
-  <section id="blocks" class="section blocks">
-    <div class="container blocks-inner">
+  <section id="story" class="section story">
+    <div class="container story-inner">
       <div>
-        <h2><span class="accent">▮</span>Know your blocks</h2>
-        <p>Paulo is monitoring a construction site overnight but it isn't exactly going smoothly… Every block that falls is a problem or an opportunity. Learn them in the two-step tutorial, then survive as long as you can: the higher the level, the faster they come.</p>
-        <p class="muted">Controls: ← → or A / D on the keyboard, any gamepad, or tap the left and right half of the screen.</p>
-        <a class="btn" href={`${base}play/`}>Start the tutorial</a>
+        <h2><span class="accent">▮</span>A night on the site</h2>
+        <p>Paulo is monitoring a construction site overnight but it isn't exactly going smoothly… Blocks of bricks are falling from the sky! While avoiding getting knocked, Paulo is trying to align the blocks to destroy the wall.</p>
+        <p class="muted">Every 27 bricks cleared is a level, up to 99. The higher the level, the faster the bricks, and the shorter the breaks between them. How far can you go?</p>
+        <a class="btn" href={`${base}play/`}>Start the night shift</a>
       </div>
-      <ol class="block-list">
+      <div class="video">
+        <iframe src="https://www.youtube-nocookie.com/embed/xp6RN9XDwVo?rel=0" title="Paulo trailer" allow="autoplay; encrypted-media; fullscreen" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="blocks" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>Know your blocks</h2>
+      <p class="muted">Every block that falls is a problem or an opportunity. Bricks make up most of the sky; the special ones show up more often as the levels go by.</p>
+      <ul class="items blocks">
         {blocks.map((b) => (
-          <li><strong>{b.name}</strong> — {b.text}</li>
+          <li>
+            <img class="pixel" src={sprite(b.name)} alt="" />
+            <span><strong>{b.title}</strong> <span class="muted">{b.text}</span></span>
+          </li>
         ))}
-      </ol>
+      </ul>
+      <h3 class="sub">Inside the crates</h3>
+      <ul class="items gifts">
+        {gifts.map((g) => (
+          <li>
+            <img class="pixel" src={sprite(g.name)} alt="" />
+            <span><strong>{g.title}</strong> <span class="muted">{g.text}</span></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="how-to-play" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>How to play</h2>
+      <div class="howto">
+        <div class="table-wrap">
+          <table class="controls">
+            <thead><tr><th></th><th>Touch</th><th>Keyboard</th><th>Gamepad</th></tr></thead>
+            <tbody>
+              {controls.map((c) => (
+                <tr><th>{c.action}</th><td>{c.touch}</td><td><kbd>{c.keys}</kbd></td><td>{c.pad}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ol class="steps">
+          <li><strong>Avoid the bricks.</strong> A block landing on Paulo costs a heart; with no heart left, the night is over.</li>
+          <li><strong>Push the blocks.</strong> Walk into a block on the ground to shove it one column over. Anvils won't budge.</li>
+          <li><strong>Complete lines.</strong> A full row flashes and disappears. Bombs and TNT in the row take their neighbours with them.</li>
+          <li><strong>Open the locks.</strong> Locks only break with a key in your pocket. Keys come out of crates.</li>
+          <li><strong>Fill the collection.</strong> Crates also hide 32 fruits, vegetables and snacks. New ones appear as you level up.</li>
+        </ol>
+      </div>
+      <p class="muted small">The two-step tutorial in the game walks you through all of this in a minute.</p>
+    </div>
+  </section>
+
+  <section id="costumes" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>Nine costumes</h2>
+      <p class="muted">Paulo starts in his overalls. Every other costume is tied to a few items of the collection: find them all and the closet lets you wear it.</p>
+      <ul class="sprites">
+        {costumes.map((c) => (
+          <li><img class="pixel" src={sprite(`costume-${c.file}`)} alt={c.title} /><span>{c.title}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="collection" class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>The collection</h2>
+      <p class="muted">Thirty-two things to eat, hidden in the crates. Each level unlocks three more kinds, so the burger only shows up once you have survived a while.</p>
+      <ul class="collection">
+        {items.map((name, i) => (
+          <li><img class="pixel" src={sprite(`item-${String(i).padStart(2, '0')}`)} alt={name} title={name} /><span>{name}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2><span class="accent">▮</span>In motion</h2>
+      <div class="gifs">
+        {gifs.map((g) => <img src={`${base}images/${g}`} alt="Paulo gameplay" loading="lazy" width="288" height="512" />)}
+      </div>
+      <div class="quotes">
+        {quotes.map((q) => (
+          <blockquote>
+            <p>“{q.text}”</p>
+            <cite>— {q.author}</cite>
+          </blockquote>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -90,10 +217,6 @@ const blocks = [
       <div class="shots">
         {screenshots.map((s) => <img src={`${base}images/${s.src}`} alt={s.alt} loading="lazy" width="320" />)}
       </div>
-      <div class="shots gifs">
-        {animations.map((a) => <img src={`${base}images/${a}`} alt="Paulo in motion" loading="lazy" width="288" height="512" />)}
-      </div>
-      <p class="muted small">Trailer: <a href="https://www.youtube.com/watch?v=xp6RN9XDwVo" target="_blank" rel="noopener">watch on YouTube</a></p>
     </div>
   </section>
 
@@ -109,9 +232,9 @@ const blocks = [
         </div>
         <div class="card highlight">
           <h3>Mac &amp; Windows</h3>
-          <p class="price">Small paid download</p>
+          <p class="price">On itch.io</p>
           <p>Offline, full screen, any window size. It is the "thank you" that keeps the lights on.</p>
-          <a class="btn btn-pink" href={itch} target="_blank" rel="noopener">Buy on itch.io</a>
+          <a class="btn btn-pink" href={itch} target="_blank" rel="noopener">Get it on itch.io</a>
         </div>
         <div class="card">
           <h3>Android</h3>
@@ -120,11 +243,17 @@ const blocks = [
           <a class="btn" href={play} target="_blank" rel="noopener">Google Play</a>
         </div>
       </div>
+      <div class="whatsnew">
+        <h3>What's new in 1.7</h3>
+        <ul>{whatsNew.map((w) => <li>{w}</li>)}</ul>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
+  .pixel { image-rendering: pixelated; }
+
   .hero { padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 5vw, 4rem); background: radial-gradient(ellipse at 20% 0%, rgba(33, 230, 245, 0.12), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(255, 79, 216, 0.12), transparent 55%); }
   .hero-inner { display: grid; gap: 2.5rem; align-items: center; }
   @media (min-width: 860px) { .hero-inner { grid-template-columns: 1.2fr 0.8fr; } }
@@ -134,23 +263,62 @@ const blocks = [
   .small { font-size: 0.9rem; }
   .hero-shot img { width: min(100%, 360px); margin: 0 auto; border-radius: 22px; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55); image-rendering: pixelated; }
 
-  .icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .card-icon { height: 48px; width: auto; margin-bottom: 0.6rem; }
 
-  .blocks-inner { display: grid; gap: 2rem; align-items: start; }
-  @media (min-width: 860px) { .blocks-inner { grid-template-columns: 1.1fr 0.9fr; } }
-  .block-list { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 0.7rem; }
-  .block-list li { counter-increment: step; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.9rem 3.2rem; position: relative; color: var(--muted); }
-  .block-list li strong { color: var(--text); }
-  .block-list li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 1rem; top: 0.85rem; font-family: var(--mono); color: var(--pink); }
+  .story-inner { display: grid; gap: 2rem; align-items: center; }
+  @media (min-width: 860px) { .story-inner { grid-template-columns: 1fr 1.1fr; } }
+  .video { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+  .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  .sub { font-size: 1.05rem; margin: 1.6rem 0 0.8rem; color: var(--text); }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  @media (min-width: 720px) { .items { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .items { grid-template-columns: 1fr 1fr 1fr; } }
+  .items li { display: flex; align-items: center; gap: 0.9rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0.6rem 0.9rem; font-size: 0.9rem; }
+  .items li > span { display: flex; flex-direction: column; }
+  .items img { height: 48px; width: 48px; object-fit: contain; flex: 0 0 auto; }
+  .gifts img { height: 40px; width: 40px; }
+  .items strong { color: var(--text); margin-right: 0.3em; }
+
+  .howto { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 860px) { .howto { grid-template-columns: 0.9fr 1.1fr; } }
+  .table-wrap { width: 100%; overflow-x: auto; }
+  .controls { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .controls th, .controls td { text-align: left; padding: 0.7rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .controls thead th { color: var(--muted); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .controls tbody th { color: var(--text); font-weight: 600; }
+  .controls td { color: var(--muted); }
+  kbd { font-family: var(--mono); font-size: 0.9em; padding: 0.15em 0.5em; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--cyan); white-space: nowrap; }
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 0.7rem; }
+  .steps li { counter-increment: step; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.9rem 3.2rem; position: relative; color: var(--muted); font-size: 0.95rem; }
+  .steps li strong { color: var(--text); }
+  .steps li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 1rem; top: 0.85rem; font-family: var(--mono); color: var(--pink); }
+
+  .sprites { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.8rem; }
+  .sprites li { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 0.5rem; padding: 1rem 0.4rem; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; color: var(--muted); font-size: 0.85rem; }
+  .sprites img { height: 80px; width: 80px; }
+
+  .collection { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 0.6rem; }
+  .collection li { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 0.7rem 0.3rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; color: var(--muted); font-size: 0.72rem; text-align: center; }
+  .collection img { height: 48px; width: 48px; }
+
+  .gifs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .gifs img { width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); image-rendering: pixelated; }
+  .quotes { display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .quotes { grid-template-columns: 1fr 1fr; } }
+  .quotes blockquote { margin: 0; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--pink); border-radius: 12px; padding: 1rem 1.2rem; }
+  .quotes p { margin: 0 0 0.4em; }
+  .quotes cite { color: var(--muted); font-style: normal; font-size: 0.9rem; }
 
   .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
   .shots img { width: 100%; border-radius: 16px; border: 1px solid var(--line); }
-  .gifs { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-  .gifs img { image-rendering: pixelated; }
 
   .download .card { display: flex; flex-direction: column; gap: 0.6rem; }
   .download .card .btn { margin-top: auto; align-self: flex-start; }
   .download .price { color: var(--cyan); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.8rem; }
   .download .highlight { border-color: rgba(255, 79, 216, 0.5); box-shadow: 0 0 40px rgba(255, 79, 216, 0.12); }
   .download .highlight .price { color: var(--pink); }
+  .whatsnew { margin-top: 2rem; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.4rem; }
+  .whatsnew h3 { font-size: 1rem; margin-bottom: 0.5em; }
+  .whatsnew ul { margin: 0; padding-left: 1.2em; color: var(--muted); }
 </style>
