@@ -1,3 +1,125 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Paulo (build placeholder)</title>
-<style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b0d17;color:#8b90a8;font-family:system-ui,sans-serif;text-align:center}</style></head>
-<body><div><p>The Unity web build is not published yet.</p><p>Run <code>Deploy/github-pages/publish-web.sh</code> from the Unity project to replace this page.</p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Paulo, a retro arcade game: dodge the falling bricks, push the blocks, clear the lines. Pixel art, chiptunes and a CRT filter, free in your browser.">
+  <meta name="theme-color" content="#0b0d17">
+  <title>Paulo — play in your browser</title>
+  <link rel="icon" type="image/png" href="TemplateData/favicon.png">
+  <link rel="apple-touch-icon" href="TemplateData/favicon.png">
+  <link rel="stylesheet" href="TemplateData/style.css">
+</head>
+<body>
+  <div id="unity-container">
+    <canvas id="unity-canvas" width=540 height=960 tabindex="-1"></canvas>
+
+    <div id="unity-loading">
+      <img id="unity-logo" src="TemplateData/logo.png" alt="Paulo">
+      <div id="unity-progress-bar-empty"><div id="unity-progress-bar-full"></div></div>
+      <p id="unity-loading-text">loading…</p>
+    </div>
+
+    <div id="unity-warning"></div>
+
+    <footer id="unity-footer">
+      <span id="unity-build-title">Paulo <small>v1.7</small> · <a href="https://www.kuragestudios.com" target="_blank" rel="noopener">Kurage Studios</a></span>
+      <span id="unity-footer-actions">
+        <a id="unity-itch" class="footer-button" href="https://kuragestudios.itch.io/paulo" target="_blank" rel="noopener" title="Get the Mac / Windows version">♥ support on itch.io</a>
+        <button id="unity-fullscreen-button" class="footer-button" type="button" title="Fullscreen">⛶ fullscreen</button>
+      </span>
+    </footer>
+  </div>
+
+  <script>
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loading = document.querySelector("#unity-loading");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var loadingText = document.querySelector("#unity-loading-text");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var warningBanner = document.querySelector("#unity-warning");
+
+    // Shows a temporary message banner/ribbon for a few seconds, or
+    // a permanent error message on top of the canvas if type=='error'.
+    function unityShowBanner(msg, type) {
+      function updateBannerVisibility() {
+        warningBanner.style.display = warningBanner.children.length ? "block" : "none";
+      }
+      var div = document.createElement("div");
+      div.innerHTML = msg;
+      warningBanner.appendChild(div);
+      if (type == "error") {
+        div.className = "banner-error";
+      } else {
+        if (type == "warning") div.className = "banner-warning";
+        setTimeout(function () {
+          warningBanner.removeChild(div);
+          updateBannerVisibility();
+        }, 5000);
+      }
+      updateBannerVisibility();
+    }
+
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/WebGL.loader.js";
+    var config = {
+      arguments: [],
+      dataUrl: buildUrl + "/WebGL.data.unityweb",
+      frameworkUrl: buildUrl + "/WebGL.framework.js.unityweb",
+      codeUrl: buildUrl + "/WebGL.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Kurage Studios",
+      productName: "Paulo",
+      productVersion: "1.7",
+      showBanner: unityShowBanner,
+    };
+
+    // embedded in the website /play/ page or on itch.io: the host page provides the chrome
+    var isEmbedded = window.self !== window.top;
+    if (isEmbedded) {
+      document.body.classList.add("embedded");
+    }
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      // phones: render at CSS pixel resolution, plenty for a 288x512 pixel-art game and saves battery
+      config.devicePixelRatio = 1;
+      document.body.classList.add("mobile");
+    }
+
+    // Portrait 9:16 game: give it the whole window, the camera letterboxes on wide screens.
+    function resizeCanvas() {
+      var footer = document.querySelector("#unity-footer");
+      var footerHeight = (document.fullscreenElement || isMobile || isEmbedded) ? 0 : footer.offsetHeight;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = (window.innerHeight - footerHeight) + "px";
+    }
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("orientationchange", resizeCanvas);
+    document.addEventListener("fullscreenchange", resizeCanvas);
+    resizeCanvas();
+
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = function () {
+      createUnityInstance(canvas, config, function (progress) {
+        progressBarFull.style.width = 100 * progress + "%";
+        loadingText.textContent = Math.round(100 * progress) + " %";
+      }).then(function (unityInstance) {
+        loading.classList.add("done");
+        setTimeout(function () { loading.style.display = "none"; }, 400);
+        fullscreenButton.onclick = function () {
+          unityInstance.SetFullscreen(1);
+        };
+        canvas.focus();
+      }).catch(function (message) {
+        loadingText.textContent = "could not start the game";
+        unityShowBanner(message, "error");
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
